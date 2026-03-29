@@ -1,0 +1,196 @@
+/ {
+    chosen {
+        zephyr,console    = &uart0;
+        zephyr,shell-uart = &uart0;
+    };
+
+    omni_outputs {
+        compatible = "gpio-leds";
+
+        stf_enable:    stf_enable    { gpios = <&gpio1 2  GPIO_ACTIVE_HIGH>; };
+        pcm_valve:     pcm_valve     { gpios = <&gpio1 3  GPIO_ACTIVE_HIGH>; };
+        spring_sel0:   spring_sel0   { gpios = <&gpio1 4  GPIO_ACTIVE_HIGH>; };
+        spring_sel1:   spring_sel1   { gpios = <&gpio1 5  GPIO_ACTIVE_HIGH>; };
+        harvest_gate:  harvest_gate  { gpios = <&gpio1 6  GPIO_ACTIVE_HIGH>; };
+        beacon_enable: beacon_enable { gpios = <&gpio1 7  GPIO_ACTIVE_HIGH>; };
+
+        muxa_a0: muxa_a0 { gpios = <&gpio1 8  GPIO_ACTIVE_HIGH>; };
+        muxa_a1: muxa_a1 { gpios = <&gpio1 9  GPIO_ACTIVE_HIGH>; };
+        muxa_a2: muxa_a2 { gpios = <&gpio1 10 GPIO_ACTIVE_HIGH>; };
+
+        muxb_a0: muxb_a0 { gpios = <&gpio1 11 GPIO_ACTIVE_HIGH>; };
+        muxb_a1: muxb_a1 { gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>; };
+        muxb_a2: muxb_a2 { gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>; };
+    };
+
+    omni_heat_pwm {
+        compatible = "pwm-leds";
+        heat_ch0: heat_ch0 { pwms = <&pwm0 0 PWM_HZ(5000) PWM_POLARITY_NORMAL>; };
+        heat_ch1: heat_ch1 { pwms = <&pwm0 1 PWM_HZ(5000) PWM_POLARITY_NORMAL>; };
+        heat_ch2: heat_ch2 { pwms = <&pwm0 2 PWM_HZ(5000) PWM_POLARITY_NORMAL>; };
+        heat_ch3: heat_ch3 { pwms = <&pwm0 3 PWM_HZ(5000) PWM_POLARITY_NORMAL>; };
+    };
+};
+
+&arduino_spi {
+    status   = "okay";
+    cs-gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
+
+    icm42688p: icm42688p@0 {
+        compatible        = "invensense,icm42688";
+        reg               = <0>;
+        spi-max-frequency = <8000000>;
+        int-gpios         = <&gpio0 12 GPIO_ACTIVE_HIGH>;
+    };
+};
+
+&i2c1 {
+    compatible      = "nordic,nrf-twim";
+    status          = "okay";
+    pinctrl-0       = <&i2c1_default>;
+    pinctrl-1       = <&i2c1_sleep>;
+    pinctrl-names   = "default", "sleep";
+    clock-frequency = <I2C_BITRATE_FAST>;
+
+    max30102: max30102@57 {
+        compatible = "maxim,max30102";
+        reg        = <0x57>;
+        int-gpios  = <&gpio0 24 GPIO_ACTIVE_LOW>;
+    };
+
+    drv2605: drv2605@5a {
+        compatible    = "ti,drv2605";
+        reg           = <0x5a>;
+        actuator-mode = "ERM";
+    };
+};
+
+&adc {
+    status         = "okay";
+    #address-cells = <1>;
+    #size-cells    = <0>;
+
+    channel@0 {
+        reg                      = <0>;
+        zephyr,gain              = "ADC_GAIN_1_6";
+        zephyr,reference         = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time  = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive    = <NRF_SAADC_AIN0>;
+        zephyr,resolution        = <12>;
+    };
+    channel@1 {
+        reg                      = <1>;
+        zephyr,gain              = "ADC_GAIN_1_6";
+        zephyr,reference         = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time  = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive    = <NRF_SAADC_AIN1>;
+        zephyr,resolution        = <12>;
+    };
+    channel@2 {
+        reg                      = <2>;
+        zephyr,gain              = "ADC_GAIN_1_6";
+        zephyr,reference         = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time  = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive    = <NRF_SAADC_AIN2>;
+        zephyr,resolution        = <12>;
+    };
+    channel@3 {
+        reg                      = <3>;
+        zephyr,gain              = "ADC_GAIN_1_6";
+        zephyr,reference         = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time  = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive    = <NRF_SAADC_AIN3>;
+        zephyr,resolution        = <12>;
+    };
+    channel@4 {
+        reg                      = <4>;
+        zephyr,gain              = "ADC_GAIN_1_6";
+        zephyr,reference         = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time  = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive    = <NRF_SAADC_AIN4>;
+        zephyr,resolution        = <12>;
+    };
+    channel@5 {
+        reg                      = <5>;
+        zephyr,gain              = "ADC_GAIN_1_6";
+        zephyr,reference         = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time  = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive    = <NRF_SAADC_AIN5>;
+        zephyr,resolution        = <12>;
+    };
+    channel@6 {
+        reg                      = <6>;
+        zephyr,gain              = "ADC_GAIN_1_6";
+        zephyr,reference         = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time  = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive    = <NRF_SAADC_AIN6>;
+        zephyr,resolution        = <12>;
+    };
+    channel@7 {
+        reg                      = <7>;
+        zephyr,gain              = "ADC_GAIN_1_6";
+        zephyr,reference         = "ADC_REF_INTERNAL";
+        zephyr,acquisition-time  = <ADC_ACQ_TIME_DEFAULT>;
+        zephyr,input-positive    = <NRF_SAADC_AIN7>;
+        zephyr,resolution        = <12>;
+    };
+};
+
+&pwm0 {
+    status        = "okay";
+    pinctrl-0     = <&pwm0_custom>;
+    pinctrl-names = "default";
+};
+
+&uart1 {
+    status        = "okay";
+    current-speed = <9600>;
+    pinctrl-0     = <&uart1_default>;
+    pinctrl-names = "default";
+};
+
+&pdm0 {
+    status        = "okay";
+    pinctrl-0     = <&pdm0_default>;
+    pinctrl-names = "default";
+};
+
+&pinctrl {
+    pwm0_custom: pwm0_custom {
+        group1 {
+            psels = <NRF_PSEL(PWM_OUT0, 0, 28)>,
+                    <NRF_PSEL(PWM_OUT1, 0, 29)>,
+                    <NRF_PSEL(PWM_OUT2, 0, 30)>,
+                    <NRF_PSEL(PWM_OUT3, 0, 31)>;
+        };
+    };
+
+    i2c1_default: i2c1_default {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 27)>;
+            bias-pull-up;
+        };
+    };
+    i2c1_sleep: i2c1_sleep {
+        group1 {
+            psels = <NRF_PSEL(TWIM_SDA, 0, 26)>,
+                    <NRF_PSEL(TWIM_SCL, 0, 27)>;
+            low-power-enable;
+        };
+    };
+
+    uart1_default: uart1_default {
+        group1 {
+            psels = <NRF_PSEL(UART_TX, 1, 14)>,
+                    <NRF_PSEL(UART_RX, 1, 15)>;
+        };
+    };
+
+    pdm0_default: pdm0_default {
+        group1 {
+            psels = <NRF_PSEL(PDM_CLK, 0, 20)>,
+                    <NRF_PSEL(PDM_DIN, 0, 21)>;
+        };
+    };
+};
